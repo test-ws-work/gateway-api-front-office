@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CustomersService } from '../services/customers.service';
 import { CustomerDtoRequest } from '../dto/requests/customer-request.dto';
@@ -14,6 +15,8 @@ import { UpdateCustomerDto } from '../dto/requests/update-customer.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CustomerDtoResponse } from '../dto/responses/customer-response.dto';
 import { CustomerLoginDtoRequest } from '../dto/requests/customer-login-request.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { IsCustomer } from 'src/decorators/customer.decorator';
 
 @ApiTags('Customer')
 @Controller('api/v1/customers')
@@ -63,16 +66,18 @@ export class CustomersController {
     return this.customersService.findCustomerById(customerId);
   }
 
-  @Patch(':customerId')
+  @UseGuards(AuthGuard)
+  @Patch()
   update(
-    @Param('customerId') customerId: number,
+    @IsCustomer() customer: CustomerDtoResponse,
     @Body() updateCustomerDto: UpdateCustomerDto,
   ) {
-    return this.customersService.update(customerId, updateCustomerDto);
+    return this.customersService.update(customer.id, updateCustomerDto);
   }
 
-  @Delete(':customerId')
-  remove(@Param('customerId') customerId: number) {
-    return this.customersService.remove(customerId);
+  @UseGuards(AuthGuard)
+  @Delete()
+  remove(@IsCustomer() customer: CustomerDtoResponse) {
+    return this.customersService.remove(customer.id);
   }
 }
