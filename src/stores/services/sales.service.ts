@@ -6,7 +6,13 @@ import { SaleClient } from '../clients/sale.client';
 export class SaleService {
   constructor(private readonly saleClient: SaleClient) {}
 
-  async create(request: SaleDtoRequest) {
-    return this.saleClient.create(request);
+  async create(customerId: number, request: SaleDtoRequest) {
+    const dto: SaleDtoRequest = {
+      costumerId: customerId,
+      storeId: request.storeId,
+      tax: request.tax,
+      items: request.items,
+    };
+    return this.saleClient.create(dto);
   }
 }
