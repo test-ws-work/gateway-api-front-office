@@ -12,8 +12,16 @@ export class CustomersService {
     return this.customerClient.create(storeId, createCustomerDto);
   }
 
-  async findByEmailAndPassword(storeId: number, dto: CustomerLoginDtoRequest) {
-    return this.customerClient.findByEmailAndPassword(storeId, dto);
+  async findByEmailAndPassword(
+    storeId: number,
+    email: string,
+    password: string,
+  ) {
+    const customer: CustomerLoginDtoRequest = {
+      email,
+      password,
+    };
+    return this.customerClient.findByEmailAndPassword(storeId, customer);
   }
 
   async findCustomerById(customerId: number) {
