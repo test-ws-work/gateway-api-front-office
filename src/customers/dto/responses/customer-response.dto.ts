@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CustomerTypeEnum } from 'src/customers/common/enums/customer-type.enum';
+import { CustomerTypeEnum } from 'src/common/enums/customer-type.enum';
 
 export class CustomerDtoResponse {
   @ApiProperty()
