@@ -15,7 +15,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoreDtoResponse } from '../dtos/responses/store-response.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { IsCustomer } from 'src/decorators/customer.decorator';
-import { CustomerTypeEnum } from 'src/customers/common/enums/customer-type.enum';
+import { CustomerTypeEnum } from 'src/common/enums/customer-type.enum';
 import { CustomerDtoResponse } from 'src/customers/dto/responses/customer-response.dto';
 
 @ApiTags('Stores')

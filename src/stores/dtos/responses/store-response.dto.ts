@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { StoreStatusEnum } from 'src/stores/common/enums/store-status.enum';
+import { StoreStatusEnum } from 'src/common/enums/store-status.enum';
 
 export class StoreDtoResponse {
   @ApiProperty()
