@@ -8,8 +8,11 @@ import { ProductClient } from './clients/product.client';
 import { SalesController } from './controllers/sales.controller';
 import { SaleService } from './services/sales.service';
 import { SaleClient } from './clients/sale.client';
+import { AuthModule } from 'src/auth/auth.module';
+import { CustomersModule } from 'src/customers/customers.module';
 
 @Module({
+  imports: [AuthModule, CustomersModule],
   controllers: [StoresController, ProductsController, SalesController],
   providers: [
     StoresService,

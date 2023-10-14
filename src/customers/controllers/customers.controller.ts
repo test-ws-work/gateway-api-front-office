@@ -45,7 +45,11 @@ export class CustomersController {
     @Query('storeId') storeId: number,
     @Body() dto: CustomerLoginDtoRequest,
   ) {
-    return this.customersService.findByEmailAndPassword(storeId, dto);
+    return this.customersService.findByEmailAndPassword(
+      storeId,
+      dto.email,
+      dto.password,
+    );
   }
 
   @Get(':customerId')
