@@ -15,10 +15,21 @@ export class AuthController {
     type: String,
   })
   @ApiResponse({ status: 400, description: 'Invalid request' })
-  signIn(
+  async signInCustomer(
     @Param('storeId') storeId: number,
     @Body() createAuthDto: CreateAuthDto,
   ) {
-    return this.authService.signIn(storeId, createAuthDto);
+    return this.authService.signInCustomer(storeId, createAuthDto);
+  }
+
+  @Post()
+  @ApiResponse({
+    status: 201,
+    description: 'Return Jwt token',
+    type: String,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid request' })
+  async signInLogist(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.signInLogist(createAuthDto);
   }
 }

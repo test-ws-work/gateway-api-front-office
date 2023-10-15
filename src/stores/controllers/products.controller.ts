@@ -7,13 +7,18 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductsService } from '../services/products.service';
 import { ProductDtoResponse } from '../dtos/responses/product-response.dto';
 import { ProductDtoRequest } from '../dtos/requests/product-request.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { IsLogist } from 'src/decorators/logist.decorator';
+import { LogistDtoResponse } from 'src/logists/dto/responses/logist-response.dto';
 
 @ApiTags('Products')
+@UseGuards(AuthGuard)
 @Controller('api/v1/products')
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
@@ -25,8 +30,11 @@ export class ProductsController {
     type: ProductDtoResponse,
   })
   @ApiResponse({ status: 400, description: 'Invalid request' })
-  create(@Body() product: ProductDtoRequest) {
-    return this.productService.create(product);
+  create(
+    @IsLogist() logist: LogistDtoResponse,
+    @Body() product: ProductDtoRequest,
+  ) {
+    return this.productService.create(logist.id, product);
   }
 
   @Get('by-product/:productId')
