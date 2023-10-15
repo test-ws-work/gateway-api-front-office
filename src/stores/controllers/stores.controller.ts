@@ -14,9 +14,9 @@ import { StoreDtoRequest } from '../dtos/requests/store-request.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StoreDtoResponse } from '../dtos/responses/store-response.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { IsCustomer } from 'src/decorators/customer.decorator';
 import { CustomerTypeEnum } from 'src/common/enums/customer-type.enum';
-import { CustomerDtoResponse } from 'src/customers/dto/responses/customer-response.dto';
+import { IsLogist } from 'src/decorators/logist.decorator';
+import { LogistDtoResponse } from 'src/logists/dto/responses/logist-response.dto';
 
 @ApiTags('Stores')
 @UseGuards(AuthGuard)
@@ -32,14 +32,14 @@ export class StoresController {
   })
   @ApiResponse({ status: 400, description: 'Invalid request' })
   create(
-    @IsCustomer() customer: CustomerDtoResponse,
+    @IsLogist() logist: LogistDtoResponse,
     @Body() dto: StoreDtoRequest,
   ): Promise<StoreDtoResponse> {
-    if (customer.customerType !== CustomerTypeEnum.ADMIN) {
+    if (logist.customerType === CustomerTypeEnum.ADMIN) {
+      return this.storesService.create(logist.id, dto);
+    } else {
       throw new ForbiddenException('Access denied.');
     }
-
-    return this.storesService.create(customer.id, dto);
   }
 
   @Get('by-user')
@@ -50,12 +50,12 @@ export class StoresController {
   })
   @ApiResponse({ status: 404, description: 'Store not found.' })
   findAllByUser(
-    @IsCustomer() customer: CustomerDtoResponse,
+    @IsLogist() logist: LogistDtoResponse,
   ): Promise<StoreDtoResponse[]> {
-    if (customer.customerType !== CustomerTypeEnum.ADMIN) {
-      throw new ForbiddenException('Access denied.');
+    if (logist.customerType === CustomerTypeEnum.ADMIN) {
+      return this.storesService.findAllByUser(logist.id);
     }
-    return this.storesService.findAllByUser();
+    throw new ForbiddenException('Access denied.');
   }
 
   @Get('by-store')
@@ -66,25 +66,25 @@ export class StoresController {
   })
   @ApiResponse({ status: 404, description: 'Store not found.' })
   searchById(
-    @IsCustomer() customer: CustomerDtoResponse,
+    @IsLogist() logist: LogistDtoResponse,
     @Query('storeId') storeId: string,
   ): Promise<StoreDtoResponse> {
-    if (customer.customerType !== CustomerTypeEnum.ADMIN) {
-      throw new ForbiddenException('Access denied.');
+    if (logist.customerType === CustomerTypeEnum.ADMIN) {
+      return this.storesService.searchById(logist.id, +storeId);
     }
-    return this.storesService.searchById(+storeId);
+    throw new ForbiddenException('Access denied.');
   }
 
   @Delete(':storeId')
   @ApiResponse({ status: 204, description: 'Remove store' })
   @ApiResponse({ status: 404, description: 'Store not found.' })
   remove(
-    @IsCustomer() customer: CustomerDtoResponse,
+    @IsLogist() logist: LogistDtoResponse,
     @Param('storeId') storeId: string,
   ) {
-    if (customer.customerType !== CustomerTypeEnum.ADMIN) {
-      throw new ForbiddenException('Access denied.');
+    if (logist.customerType === CustomerTypeEnum.ADMIN) {
+      return this.storesService.remove(+storeId);
     }
-    return this.storesService.remove(+storeId);
+    throw new ForbiddenException('Access denied.');
   }
 }

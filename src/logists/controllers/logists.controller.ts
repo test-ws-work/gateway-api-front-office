@@ -4,16 +4,18 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
   HttpCode,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { LogistsService } from '../services/logists.service';
 import { LogistDtoRequest } from '../dto/requests/logist-request.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LogistDtoResponse } from '../dto/responses/logist-response.dto';
 import { LogistLoginDtoRequest } from '../dto/requests/logist-login-request.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { IsLogist } from 'src/decorators/logist.decorator';
 
 @ApiTags('Logists')
 @Controller('api/v1/logists')
@@ -37,9 +39,10 @@ export class LogistsController {
     type: LogistDtoResponse,
   })
   @ApiResponse({ status: 404, description: 'Logist not found.' })
-  @Get(':logistId')
-  async findOne(@Param('logistId') logistId: string) {
-    return this.logistsService.findOne(+logistId);
+  @UseGuards(AuthGuard)
+  @Get()
+  async findOne(@IsLogist() logist: LogistDtoResponse) {
+    return this.logistsService.findOne(logist.id);
   }
 
   @ApiResponse({
@@ -49,12 +52,13 @@ export class LogistsController {
   })
   @ApiResponse({ status: 400, description: 'Invalid Request.' })
   @ApiResponse({ status: 404, description: 'Logist not found.' })
-  @Patch(':logistId')
+  @UseGuards(AuthGuard)
+  @Patch()
   async update(
-    @Param('logistId') logistId: string,
+    @IsLogist() logist: LogistDtoResponse,
     @Body() request: LogistDtoRequest,
   ) {
-    return this.logistsService.update(+logistId, request);
+    return this.logistsService.update(logist.id, request);
   }
 
   @ApiResponse({
@@ -62,10 +66,11 @@ export class LogistsController {
     description: 'Remove logist',
   })
   @ApiResponse({ status: 404, description: 'Logist not found.' })
-  @Delete(':logistId')
+  @UseGuards(AuthGuard)
+  @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('logistId') logistId: string) {
-    this.logistsService.remove(+logistId);
+  async remove(@IsLogist() logist: LogistDtoResponse) {
+    this.logistsService.remove(logist.id);
   }
 
   @ApiResponse({

@@ -6,10 +6,7 @@ import { ProductClient } from '../clients/product.client';
 export class ProductsService {
   constructor(private readonly productClient: ProductClient) {}
 
-  async create(product: ProductDtoRequest) {
-    // Buscar o id do vendedor logado após criar o AuthService e validar o token
-    const userId = 1;
-
+  async create(userId: number, product: ProductDtoRequest) {
     return this.productClient.create(userId, product);
   }
 

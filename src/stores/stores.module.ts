@@ -10,9 +10,10 @@ import { SaleService } from './services/sales.service';
 import { SaleClient } from './clients/sale.client';
 import { AuthModule } from 'src/auth/auth.module';
 import { CustomersModule } from 'src/customers/customers.module';
+import { LogistsModule } from 'src/logists/logists.module';
 
 @Module({
-  imports: [AuthModule, CustomersModule],
+  imports: [AuthModule, CustomersModule, LogistsModule],
   controllers: [StoresController, ProductsController, SalesController],
   providers: [
     StoresService,
