@@ -6,24 +6,15 @@ import { StoreClient } from '../clients/store.client';
 export class StoresService {
   constructor(private readonly storeClient: StoreClient) {}
 
-  async create(dto: StoreDtoRequest) {
-    // Buscar o id do vendedor logado após criar o AuthService e validar o token
-    const userId = 1;
-
+  async create(userId: number, dto: StoreDtoRequest) {
     return this.storeClient.create(userId, dto);
   }
 
-  findAllByUser() {
-    // Buscar o id do vendedor logado após criar o AuthService e validar o token
-    const userId = 1;
-
+  findAllByUser(userId: number) {
     return this.storeClient.findAllByUser(userId);
   }
 
-  searchById(storeId: number) {
-    // Buscar o id do vendedor logado após criar o AuthService e validar o token
-    const userId = 1;
-
+  searchById(userId: number, storeId: number) {
     return this.storeClient.searchById(userId, storeId);
   }
 
